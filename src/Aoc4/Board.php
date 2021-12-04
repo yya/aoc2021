@@ -8,8 +8,7 @@ class Board
     private array $board = [];
     private array $marked = [];
     private ?int $lastMarked = null;
-    private ?int $markedRow = null;
-    private ?int $markedColumn = null;
+    private bool $won = false;
 
     private function __construct(array $board)
     {
@@ -35,6 +34,9 @@ class Board
 
     public function mark(int $number): void
     {
+        if ($this->won) {
+            return;
+        }
         foreach ($this->board as $rowIndex => $rowValue) {
             foreach ($rowValue as $columnIndex => $columnValue) {
                 if ($this->marked[$rowIndex][$columnIndex]) {
@@ -50,9 +52,12 @@ class Board
 
     public function bingo(): bool
     {
+        if ($this->won) {
+            return true;
+        }
         foreach ($this->marked as $rowIndex => $rowValues) {
             if (array_sum($rowValues) === count($rowValues)) {
-                $this->markedRow = $rowIndex;
+                $this->won = true;
                 return true;
             }
         }
@@ -60,15 +65,14 @@ class Board
         for ($columnIndex = 0; $columnIndex < count($this->marked); $columnIndex++) {
             $columnValues = array_column($this->marked, $columnIndex);
             if (array_sum($columnValues) === count($columnValues)) {
-                $this->markedColumn = $columnIndex;
+                $this->won = true;
                 return true;
             }
         }
         return false;
     }
 
-
-    public function getScore()
+    public function getScore(): int
     {
         $unmarked = [];
         foreach ($this->board as $rowIndex => $rowValue) {
@@ -81,6 +85,11 @@ class Board
         }
 
         return array_sum($unmarked) * $this->lastMarked;
+    }
+
+    public function won(): bool
+    {
+        return $this->won;
     }
 
 }
