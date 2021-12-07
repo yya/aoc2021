@@ -77,10 +77,13 @@ final class Main
 
     private function cost2(int $value): int
     {
-        static $values;
-        if (!isset($values[$value])) {
-            $values[$value] = array_sum(range(1, $value));
-        }
-        return $values[$value];
+//        static $values;
+//        if (!isset($values[$value])) {
+//            $values[$value] = array_sum(range(1, $value));
+//        }
+//        return $values[$value];
+
+        //-- or s. https://de.wikipedia.org/wiki/Gau%C3%9Fsche_Summenformel
+        return $value * ($value + 1) /2;
     }
 }
