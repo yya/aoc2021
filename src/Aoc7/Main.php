@@ -77,6 +77,10 @@ final class Main
 
     private function cost2(int $value): int
     {
-        return array_sum(range(1, $value));
+        static $values;
+        if (!isset($values[$value])) {
+            $values[$value] = array_sum(range(1, $value));
+        }
+        return $values[$value];
     }
 }
